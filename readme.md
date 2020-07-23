@@ -1,5 +1,16 @@
 下表列出了Spring数据存储库查询派生机制通常支持的关键字。但是，请参考特定于存储的文档以获得受支持关键字的确切列表，因为这里列出的一些关键字可能在特定的存储中不受支持。
 
+Techniques adopted
+
+tec                      |   official website 
+-------------------------|-------------------
+SPRING DATA JPA          |  https://spring.io/projects/spring-data
+MAPSTRUCT                |  https://mapstruct.org/
+
+
+
+
+
 Logical keyword          |        Keyword expressions
 -------------------------|---------------------
 AND                      |        And
