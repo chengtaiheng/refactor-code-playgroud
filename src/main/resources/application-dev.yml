@@ -1,0 +1,27 @@
+server:
+  port: 1667
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://49.233.69.218:3306/refactor_test?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8"
+    username: "root"
+    password: "root"
+
+  jpa:
+    open-in-view: false
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate:
+        format_sql: true
+        enable_lazy_load_no_trans: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+
+
+
+
