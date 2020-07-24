@@ -4,3 +4,7 @@
 #istio
 #redission
 #promethean
+
+你好 | hello
+----|------
+是的 | 阿姨
