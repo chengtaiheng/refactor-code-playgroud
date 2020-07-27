@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface UserRepository extends BaseRepository<PlatformUser, Long> {
     Optional<PlatformUser> findByTrueName(String trueName);
 
-    List<PlatformUser> findByAgeGreaterThanEqualAndAgeIsLessThanEqual(int age1,int age2);
+    List<PlatformUser> findByAgeGreaterThanEqualAndAgeIsLessThanEqual(int age1, int age2);
 
     /**
      * 可根据查寻条件分页
