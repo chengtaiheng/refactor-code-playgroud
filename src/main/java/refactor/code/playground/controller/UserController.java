@@ -111,7 +111,7 @@ public class UserController {
     }
 
     @GetMapping("/detail-address")
-    public PlatformUser findByDetailAddress( @RequestParam("detailAddress") String detailAddress) {
+    public PlatformUser findByDetailAddress(@RequestParam("detailAddress") String detailAddress) {
         log.info("detailAddress = {}", detailAddress);
         return userRepository.findByAddressDetailAddress(detailAddress);
     }
