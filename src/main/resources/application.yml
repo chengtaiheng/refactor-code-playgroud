@@ -20,8 +20,154 @@ spring:
         format_sql: true
         enable_lazy_load_no_trans: true
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  application:
+    name: "refactor.code.playground"
 
+#  jackson:
+#    serialization:
+#      indent_output
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 
+  health:
+    diskspace:
+      enabled: false
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: false
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+        resilience4j:
+          circuitbreaker:
+            calls: true
+
+info:
+  name: ${spring.application.name}
+  description: refactor.code.playground
+  environment: ${spring.profiles.active}
+  version: 0.0.1
+
+esilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      recordExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.util.concurrent.TimeoutException
+        - java.io.IOException
+      ignoreExceptions:
+        - refactor.conde.playground.resilen4j.exception.BusinessException
+    shared:
+      slidingWindowSize: 100
+      permittedNumberOfCallsInHalfOpenState: 30
+      waitDurationInOpenState: 1s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      ignoreExceptions:
+        - refactor.conde.playground.resilen4j.exception.BusinessException
+
+  instances:
+    backendA:
+      baseConfig: default
+    backendB:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 10
+      permittedNumberOfCallsInHalfOpenState: 3
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      recordFailurePredicate: refactor.conde.playground.resilen4j.exception.RecordFailurePredicate
+
+resilience4j.retry:
+  configs:
+    default:
+      maxRetryAttempts: 3
+      waitDuration: 100
+      retryExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.util.concurrent.TimeoutException
+        - java.io.IOException
+#      ignoreExceptions:
+#        - refactor.conde.playground.resilen4j.exception.BusinessException
+  instances:
+    backendA:
+      baseConfig: default
+    backendB:
+      baseConfig: default
+resilience4j.bulkhead:
+  configs:
+    default:
+      maxConcurrentCalls: 100
+  instances:
+    backendA:
+      maxConcurrentCalls: 10
+    backendB:
+      maxWaitDuration: 10ms
+      maxConcurrentCalls: 20
+
+resilience4j.thread-pool-bulkhead:
+  configs:
+    default:
+      maxThreadPoolSize: 4
+      coreThreadPoolSize: 2
+      queueCapacity: 2
+  instances:
+    backendA:
+      baseConfig: default
+    backendB:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+
+resilience4j.ratelimiter:
+  configs:
+    default:
+      registerHealthIndicator: false
+      limitForPeriod: 10
+      limitRefreshPeriod: 1s
+      timeoutDuration: 0
+      eventConsumerBufferSize: 100
+  instances:
+    backendA:
+      baseConfig: default
+    backendB:
+      limitForPeriod: 6
+      limitRefreshPeriod: 500ms
+      timeoutDuration: 3s
+
+resilience4j.timelimiter:
+  configs:
+    default:
+      cancelRunningFuture: false
+      timeoutDuration: 2s
+  instances:
+    backendA:
+      baseConfig: default
+    backendB:
+      baseConfig: default
+#enigma:
+#  debug-mode: true
 
 

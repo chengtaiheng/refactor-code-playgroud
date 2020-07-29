@@ -8,6 +8,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.vavr.control.Try;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeoutException;
 
 import static io.github.resilience4j.bulkhead.annotation.Bulkhead.Type;
 
+@Slf4j
 @Component(value = "backendAservice")
 public class BackendAService implements Service {
 
@@ -33,6 +35,7 @@ public class BackendAService implements Service {
     @Bulkhead(name = BACKEND_A)
     @Retry(name = BACKEND_A)
     public String failure() {
+        log.debug("====================================进来了");
         throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "This is a remote exception");
     }
 
